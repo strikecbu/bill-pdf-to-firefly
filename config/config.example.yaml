@@ -32,6 +32,7 @@ banks:
     pdf_password_template: "{id_number}"
     parser_class: "SinopacParser"
     cards:
+      "1300": "永豐 DAWHO卡"
       "3456": "永豐 大戶卡"
       "2302": "永豐 DAWAY卡 - 2302"
       "1703": "永豐 幣倍卡 1703"
@@ -44,13 +45,14 @@ banks:
     subject_keywords:
       - "對帳單"
       - "信用卡帳單"
-    pdf_password_template: "{birthday}"
+      - "電子帳單"
+    pdf_password_template: "{id_number_last2}{birthday_mmdd}"
     parser_class: "TaishinParser"
     cards:
-      "1234": "台新 Richart 悠遊御璽卡"
-      "8601": "台新 RoseGiving 8601"
-      "5678": "台新 Richart Fly GO"
-      "9012": "台新 遠傳friDay聯名卡"
+      "3209": "台新 Richart 悠遊御璽卡"
+      "4707": "台新 Richart FlyGo 鈦金商務"
+      "8601": "台新 RoseGiving 鈦金商務"
+      "8306": "台新 遠傳friDay聯名鈦金卡"
 
   cathay:
     name: "國泰世華"

@@ -46,14 +46,14 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 - **Config**: `config/config.yaml` loaded via `app/config.py` (Pydantic models). Env vars `FIREFLY_BASE_URL` and `FIREFLY_API_TOKEN` override config.
 - **Database**: SQLite at `./data/statements.db`, models in `app/models/database.py` (SQLModel). Two tables: `statements` and `transactions`.
 - **Parsers**: Plugin architecture. Each bank has a parser in `app/parsers/` extending `BaseParser`. Registered in `ParserFactory._register_all()`.
-- **Implemented parsers**: `sinopac` (永豐銀行), `taishin` (台新銀行). Other 5 banks are configured but parsers not yet implemented.
+- **Implemented parsers**: `sinopac` (永豐銀行 — 綜合對帳單 + 信用卡帳單), `taishin` (台新銀行). Other 5 banks are configured but parsers not yet implemented.
 
 ## Key Files
 
 - `app/config.py` — Settings model, YAML loading, `get_settings()` singleton
 - `app/models/database.py` — Statement/Transaction SQLModel tables, `get_engine()`, `get_session()`
 - `app/parsers/base_parser.py` — Abstract base with `classify_transaction_type()` (withdrawal/deposit/transfer keywords)
-- `app/parsers/sinopac_parser.py` — Parses deposit tables + credit card tables from 永豐 PDF (table-based)
+- `app/parsers/sinopac_parser.py` — Parses 永豐 statements: auto-detects type (綜合對帳單=table-based deposit parsing, 信用卡帳單=text-based with MM/DD dates, foreign currency, cashback filtering)
 - `app/parsers/taishin_parser.py` — Parses 台新 credit card statements (text-based, ROC dates, multiline rows, foreign currency)
 - `app/services/import_service.py` — Two flows: `process_notification()` (Gmail push) and `process_pdf_file()` (upload)
 - `cli.py` — CLI tool for testing: `parse` (PDF→transactions), `raw` (inspect PDF tables/text), `banks` (list config)
