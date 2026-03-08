@@ -93,3 +93,6 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 - `credentials.json` — Google OAuth client secret
 - `token.json` — Google OAuth access token
 - `data/statements.db` — parsed financial data
+
+## Development Notes
+- update CLAUDE.md and README.md as project evolves
