@@ -15,13 +15,23 @@ class PdfService:
         self.settings = get_settings()
 
     def generate_password(self, bank_config: BankConfig) -> str:
-        """Generate PDF password based on bank's template and user info."""
+        """Generate PDF password based on bank's template and user info.
+
+        Supported template variables:
+        - {id_number}       : full ID number (e.g. A123456789)
+        - {id_number_last2} : last 2 digits of ID number (e.g. 89)
+        - {birthday}        : full birthday string (e.g. 19900704)
+        - {birthday_mmdd}   : birthday month+day 4 digits (e.g. 0704)
+        - {phone}           : phone number
+        """
         template = bank_config.pdf_password_template
         user = self.settings.user
 
         password = template.format(
             id_number=user.id_number,
+            id_number_last2=user.id_number[-2:] if len(user.id_number) >= 2 else "",
             birthday=user.birthday,
+            birthday_mmdd=user.birthday[4:8] if len(user.birthday) >= 8 else user.birthday,
             phone=user.phone,
         )
         return password

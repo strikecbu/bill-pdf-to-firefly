@@ -17,7 +17,7 @@
 | 銀行     | 模組代碼  | 密碼類型       | 解析器狀態 |
 |----------|-----------|----------------|------------|
 | 永豐銀行 | sinopac   | 身分證字號     | 已實作     |
-| 台新銀行 | taishin   | 出生日期       | 待實作     |
+| 台新銀行 | taishin   | 身分證末2碼+生日月日 | 已實作     |
 | 國泰世華 | cathay    | 身分證字號     | 待實作     |
 | 富邦銀行 | fubon     | 身分證字號     | 待實作     |
 | 玉山銀行 | esun      | 出生日期       | 待實作     |
@@ -118,13 +118,32 @@ curl -X POST "http://localhost:8000/api/upload?bank_code=sinopac" \
 4. 在 `app/parsers/__init__.py` 的 `_register_all()` 中註冊
 
 ```python
-# app/parsers/taishin_parser.py
+# app/parsers/cathay_parser.py
 from app.parsers.base_parser import BaseParser
 
-class TaishinParser(BaseParser):
+class CathayParser(BaseParser):
     def parse(self, pdf_path: str) -> list:
         # 解析 PDF，回傳交易列表
         ...
+```
+
+## CLI 工具
+
+提供 `cli.py` 命令列工具，可直接測試 PDF 解析，無需啟動伺服器：
+
+```bash
+# 解析 PDF 並顯示表格
+python3 cli.py parse statement.pdf --bank taishin --password 710704
+
+# 輸出 JSON 格式
+python3 cli.py parse statement.pdf -b sinopac -p S123456789 -f json
+
+# 查看 PDF 原始表格/文字（開發新解析器時使用）
+python3 cli.py raw statement.pdf -p 710704 --mode tables
+python3 cli.py raw statement.pdf -p 710704 --mode text
+
+# 列出已設定的銀行
+python3 cli.py banks
 ```
 
 ## 專案結構
@@ -140,7 +159,8 @@ bill-pdf-to-firefly/
 │   ├── parsers/
 │   │   ├── __init__.py          # ParserFactory 解析器工廠
 │   │   ├── base_parser.py       # 解析器基礎類別
-│   │   └── sinopac_parser.py    # 永豐銀行解析器
+│   │   ├── sinopac_parser.py    # 永豐銀行解析器
+│   │   └── taishin_parser.py    # 台新銀行解析器
 │   ├── routers/
 │   │   ├── webhook.py           # Gmail Pub/Sub Webhook
 │   │   └── statements.py        # REST API 端點
@@ -156,6 +176,7 @@ bill-pdf-to-firefly/
 ├── config/
 │   ├── config.yaml              # 主要組態檔（請勿提交）
 │   └── config.example.yaml      # 範例組態檔
+├── cli.py                       # CLI 測試工具
 ├── Dockerfile
 ├── docker-compose.yaml
 └── requirements.txt

@@ -30,9 +30,8 @@ class ParserFactory:
     def _register_all(cls):
         from app.parsers.sinopac_parser import SinopacParser
         cls._parsers["sinopac"] = SinopacParser
-        # Register additional parsers as they are implemented:
-        # from app.parsers.taishin_parser import TaishinParser
-        # cls._parsers["taishin"] = TaishinParser
+        from app.parsers.taishin_parser import TaishinParser
+        cls._parsers["taishin"] = TaishinParser
         # from app.parsers.cathay_parser import CathayParser
         # cls._parsers["cathay"] = CathayParser
         # from app.parsers.fubon_parser import FubonParser
