@@ -7,14 +7,17 @@ Credit card statement automation system (信用卡對帳單自動化處理系統
 ## Commands
 
 ```bash
+# Install dependencies
+uv sync
+
 # Run dev server
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 # Run with Docker
-docker-compose up
+docker compose up
 
-# Install dependencies
-pip install -r requirements.txt
+# Add a dependency
+uv add <package>
 
 # Test health
 curl http://localhost:8000/health
@@ -23,14 +26,17 @@ curl http://localhost:8000/health
 curl -X POST "http://localhost:8000/api/upload?bank_code=sinopac" -F "file=@statement.pdf"
 
 # CLI: parse PDF directly (no server needed)
-python3 cli.py parse statement.pdf --bank taishin --password 710704
-python3 cli.py parse statement.pdf -b sinopac -p S123456789 -f json
+uv run python3 cli.py parse statement.pdf --bank taishin --password 710704
+uv run python3 cli.py parse statement.pdf -b sinopac -p S123456789 -f json
 
 # CLI: inspect raw PDF tables/text (for developing new parsers)
-python3 cli.py raw statement.pdf -p 710704 --mode tables
+uv run python3 cli.py raw statement.pdf -p 710704 --mode tables
 
 # CLI: list configured banks
-python3 cli.py banks
+uv run python3 cli.py banks
+
+# Run tests
+uv run pytest
 ```
 
 ## Architecture
@@ -62,6 +68,7 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 
 ## Conventions
 
+- Package manager: uv (pyproject.toml + uv.lock), always use `uv run` to execute commands
 - Language: Python 3.11+, type hints throughout
 - Framework: FastAPI with async endpoints, SQLModel for ORM
 - Config: YAML file + Pydantic validation, sensitive values via env vars

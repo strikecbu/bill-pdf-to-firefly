@@ -29,12 +29,13 @@
 ### 環境需求
 
 - Python 3.11+
+- [uv](https://docs.astral.sh/uv/) (套件管理)
 - Docker (選用)
 
 ### 安裝
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ### 設定
@@ -69,10 +70,10 @@ export FIREFLY_API_TOKEN="your-api-token"
 
 ```bash
 # 直接執行
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 # 或使用 Docker
-docker-compose up
+docker compose up
 ```
 
 ### 驗證
@@ -133,17 +134,17 @@ class CathayParser(BaseParser):
 
 ```bash
 # 解析 PDF 並顯示表格
-python3 cli.py parse statement.pdf --bank taishin --password 710704
+uv run python3 cli.py parse statement.pdf --bank taishin --password 710704
 
 # 輸出 JSON 格式
-python3 cli.py parse statement.pdf -b sinopac -p S123456789 -f json
+uv run python3 cli.py parse statement.pdf -b sinopac -p S123456789 -f json
 
 # 查看 PDF 原始表格/文字（開發新解析器時使用）
-python3 cli.py raw statement.pdf -p 710704 --mode tables
-python3 cli.py raw statement.pdf -p 710704 --mode text
+uv run python3 cli.py raw statement.pdf -p 710704 --mode tables
+uv run python3 cli.py raw statement.pdf -p 710704 --mode text
 
 # 列出已設定的銀行
-python3 cli.py banks
+uv run python3 cli.py banks
 ```
 
 ## 專案結構
@@ -177,13 +178,15 @@ bill-pdf-to-firefly/
 │   ├── config.yaml              # 主要組態檔（請勿提交）
 │   └── config.example.yaml      # 範例組態檔
 ├── cli.py                       # CLI 測試工具
+├── pyproject.toml               # uv 套件管理設定
+├── uv.lock                      # uv 鎖定檔
 ├── Dockerfile
-├── docker-compose.yaml
-└── requirements.txt
+└── docker-compose.yaml
 ```
 
 ## 技術棧
 
+- **套件管理**: uv
 - **Web 框架**: FastAPI
 - **PDF 解析**: pdfplumber
 - **PDF 解鎖**: pikepdf

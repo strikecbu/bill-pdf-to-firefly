@@ -8,6 +8,7 @@ build/
 *.egg
 .env
 .venv
+.python-version
 env/
 venv/
 data/
