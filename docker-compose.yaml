@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+      - /tmp/cc-statements:/tmp/cc-statements
+    environment:
+      - FIREFLY_BASE_URL=${FIREFLY_BASE_URL:-}
+      - FIREFLY_API_TOKEN=${FIREFLY_API_TOKEN:-}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

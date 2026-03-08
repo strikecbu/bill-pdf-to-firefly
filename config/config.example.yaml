@@ -1,0 +1,119 @@
+app:
+  log_level: INFO
+  temp_dir: /tmp/cc-statements
+  db_path: ./data/statements.db
+
+gmail:
+  credentials_file: credentials.json
+  token_file: token.json
+  pubsub_topic: ""
+  pubsub_subscription: ""
+  label_filter: "INBOX"
+
+user:
+  id_number: ""
+  birthday: ""
+  phone: ""
+
+firefly:
+  base_url: ""
+  api_token: ""
+  timeout: 30
+  max_retries: 3
+
+banks:
+  sinopac:
+    name: "永豐銀行"
+    sender_patterns:
+      - "service@sinopac.com"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{id_number}"
+    parser_class: "SinopacParser"
+    cards:
+      "3456": "永豐 大戶卡"
+      "2302": "永豐 DAWAY卡 - 2302"
+      "1703": "永豐 幣倍卡 1703"
+
+  taishin:
+    name: "台新銀行"
+    sender_patterns:
+      - "service@taishinbank.com.tw"
+      - "eservice@taishinbank.com.tw"
+    subject_keywords:
+      - "對帳單"
+      - "信用卡帳單"
+    pdf_password_template: "{birthday}"
+    parser_class: "TaishinParser"
+    cards:
+      "1234": "台新 Richart 悠遊御璽卡"
+      "8601": "台新 RoseGiving 8601"
+      "5678": "台新 Richart Fly GO"
+      "9012": "台新 遠傳friDay聯名卡"
+
+  cathay:
+    name: "國泰世華"
+    sender_patterns:
+      - "service@cathaybk.com.tw"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{id_number}"
+    parser_class: "CathayParser"
+    cards:
+      "0001": "國泰 KOKO iCash 白金卡"
+      "2219": "國泰 Costco 2219"
+      "7371": "國泰 CUBE卡 7371"
+
+  fubon:
+    name: "富邦銀行"
+    sender_patterns:
+      - "service@fubon.com"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{id_number}"
+    parser_class: "FubonParser"
+    cards:
+      "1186": "富邦 Costco卡 - 1186"
+      "0002": "富邦 momo卡"
+      "4806": "富邦 數位生活白金卡 4806"
+
+  esun:
+    name: "玉山銀行"
+    sender_patterns:
+      - "service@email.esunbank.com.tw"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{birthday}"
+    parser_class: "EsunParser"
+    cards:
+      "8670": "玉山 Ubear卡 - 8670"
+      "0003": "玉山 Only卡"
+      "0004": "玉山 Pi信用卡"
+
+  rakuten:
+    name: "樂天銀行"
+    sender_patterns:
+      - "service@card.rakuten.com.tw"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{custom}"
+    parser_class: "RakutenParser"
+    cards:
+      "0005": "樂天信用卡"
+
+  ctbc:
+    name: "中國信託"
+    sender_patterns:
+      - "service@ctbcbank.com"
+    subject_keywords:
+      - "對帳單"
+      - "帳單"
+    pdf_password_template: "{birthday}"
+    parser_class: "CtbcParser"
+    cards:
+      "0006": "中信 英雄聯盟卡"
