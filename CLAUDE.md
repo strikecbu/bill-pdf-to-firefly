@@ -52,7 +52,7 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 - **Config**: `config/config.yaml` loaded via `app/config.py` (Pydantic models). Env vars `FIREFLY_BASE_URL` and `FIREFLY_API_TOKEN` override config.
 - **Database**: SQLite at `./data/statements.db`, models in `app/models/database.py` (SQLModel). Two tables: `statements` and `transactions`.
 - **Parsers**: Plugin architecture. Each bank has a parser in `app/parsers/` extending `BaseParser`. Registered in `ParserFactory._register_all()`.
-- **Implemented parsers**: `sinopac` (永豐銀行 — 綜合對帳單 + 信用卡帳單), `taishin` (台新銀行). Other 5 banks are configured but parsers not yet implemented.
+- **Implemented parsers**: `sinopac` (永豐銀行 — 綜合對帳單 + 信用卡帳單), `taishin` (台新銀行), `esun` (玉山銀行). Other 4 banks are configured but parsers not yet implemented.
 
 ## Key Files
 
@@ -61,6 +61,7 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 - `app/parsers/base_parser.py` — Abstract base with `classify_transaction_type()` (withdrawal/deposit/transfer keywords)
 - `app/parsers/sinopac_parser.py` — Parses 永豐 statements: auto-detects type (綜合對帳單=table-based deposit parsing, 信用卡帳單=text-based with MM/DD dates, foreign currency, cashback filtering)
 - `app/parsers/taishin_parser.py` — Parses 台新 credit card statements (text-based, ROC dates, multiline rows, foreign currency)
+- `app/parsers/esun_parser.py` — Parses 玉山 credit card statements (text-based, MM/DD dates, closing-date-based year resolution, foreign currency with embedded dates, auto-payment detection)
 - `app/services/import_service.py` — Two flows: `process_notification()` (Gmail push) and `process_pdf_file()` (upload)
 - `cli.py` — CLI tool for testing: `parse` (PDF→transactions), `raw` (inspect PDF tables/text), `banks` (list config)
 - `app/services/firefly_service.py` — Firefly III REST client, retry with exponential backoff, dedup via `external_id`
@@ -75,6 +76,7 @@ Gmail Pub/Sub → webhook.py → import_service.py → mail_classifier.py
 - Logging: structlog (structured, JSON-capable)
 - PDF password templates use `{id_number}`, `{id_number_last2}`, `{birthday}`, `{birthday_mmdd}`, `{phone}` variables
 - Taishin uses ROC calendar (民國年): year + 1911 = CE year. Conversion in `taishin_parser.roc_to_iso()`
+- E.SUN uses ROC year in header (115年01月) + MM/DD dates in transactions. Year resolved via closing date month to handle cross-month billing cycles.
 - Transaction types: `withdrawal` (消費), `deposit` (退款), `transfer` (繳費)
 - External IDs format: `stmt-{bank_code}-{date}-{index:03d}`
 - All dates stored as ISO format strings (YYYY-MM-DD)

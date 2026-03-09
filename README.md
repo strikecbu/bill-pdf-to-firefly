@@ -20,7 +20,7 @@
 | 台新銀行 | taishin   | 身分證末2碼+生日月日 | 已實作     |
 | 國泰世華 | cathay    | 身分證字號     | 待實作     |
 | 富邦銀行 | fubon     | 身分證字號     | 待實作     |
-| 玉山銀行 | esun      | 出生日期       | 待實作     |
+| 玉山銀行 | esun      | 身分證字號     | 已實作     |
 | 樂天銀行 | rakuten   | 自訂密碼       | 待實作     |
 | 中國信託 | ctbc      | 出生日期       | 待實作     |
 
@@ -161,7 +161,8 @@ bill-pdf-to-firefly/
 │   │   ├── __init__.py          # ParserFactory 解析器工廠
 │   │   ├── base_parser.py       # 解析器基礎類別
 │   │   ├── sinopac_parser.py    # 永豐銀行解析器
-│   │   └── taishin_parser.py    # 台新銀行解析器
+│   │   ├── taishin_parser.py    # 台新銀行解析器
+│   │   └── esun_parser.py       # 玉山銀行解析器
 │   ├── routers/
 │   │   ├── webhook.py           # Gmail Pub/Sub Webhook
 │   │   └── statements.py        # REST API 端點
