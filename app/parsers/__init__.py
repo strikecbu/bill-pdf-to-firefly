@@ -34,10 +34,10 @@ class ParserFactory:
         cls._parsers["taishin"] = TaishinParser
         from app.parsers.esun_parser import EsunParser
         cls._parsers["esun"] = EsunParser
+        from app.parsers.fubon_parser import FubonParser
+        cls._parsers["fubon"] = FubonParser
         # from app.parsers.cathay_parser import CathayParser
         # cls._parsers["cathay"] = CathayParser
-        # from app.parsers.fubon_parser import FubonParser
-        # cls._parsers["fubon"] = FubonParser
         # from app.parsers.esun_parser import EsunParser
         # cls._parsers["esun"] = EsunParser
         # from app.parsers.rakuten_parser import RakutenParser
